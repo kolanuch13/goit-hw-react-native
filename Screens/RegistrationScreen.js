@@ -12,14 +12,15 @@ import {
   TouchableOpacity
 } from "react-native"
 
-export const RegistrationScreen = () => {
+export const RegistrationScreen = ({set}) => {
   const [registrationForm, setRegistrationForm] = useState({
     login: '',
     email: '',
     password: '',
   })
   const [showPass, setShowPass] = useState(false)
-  
+  const [isInputActive, setIsInputActive] = useState("")
+
   const loginHandler = (text) => {
     setRegistrationForm(data => ({
       ...data,
@@ -48,6 +49,15 @@ export const RegistrationScreen = () => {
   const handleSubmit = e => {
     e.preventDefault()
     console.log(registrationForm);
+    setRegistrationForm({
+      login: '',
+      email: '',
+      password: '',
+    })
+  }
+
+  const onRedirect = () => {
+    set("login")
   }
 
   return (
@@ -69,36 +79,44 @@ export const RegistrationScreen = () => {
           <Text style={styles.heading}>Registration</Text>
           <TextInput
             onFocus={(e) => {
-              console.log(e.target.style);
-              e.target.style = styles.input
+              setIsInputActive("login")
             }}
             onBlur={(e) => {
-              console.log(e.target.style);
-              e.target.style = styles.inputFocus;
+              setIsInputActive("")
             }}
             name="login"
             placeholder="Login"
             value={registrationForm.login}
             onChangeText={loginHandler}
-            style={styles.input}
+            style={isInputActive === "login" ? styles.inputActive : styles.input}
           />
           <TextInput
-            onFocus={(e) => (e.target.style = styles.inputFocus)}
+            onFocus={(e) => {
+              setIsInputActive("email")
+            }}
+            onBlur={(e) => {
+              setIsInputActive("")
+            }}
             name="email"
             placeholder="Email"
             value={registrationForm.email}
             onChangeText={emailHandler}
-            style={styles.input}
+            style={isInputActive === "email" ? styles.inputActive : styles.input}
           />
           <View>
             <TextInput
-              onFocus={(e) => (e.target.style = styles.inputFocus)}
+              onFocus={(e) => {
+                setIsInputActive("password")
+              }}
+              onBlur={(e) => {
+                setIsInputActive("")
+              }}
               name="password"
               placeholder="Password"
               value={registrationForm.password}
               onChangeText={passHandler}
               secureTextEntry={!showPass}
-              style={styles.input}
+              style={isInputActive === "password" ? styles.inputActive : styles.input}
             />
             <TouchableOpacity
               onPress={onShowPassword}
@@ -111,7 +129,7 @@ export const RegistrationScreen = () => {
             <Text style={styles.submitButtonText}>Sign In</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={handleSubmit}
+            onPress={onRedirect}
             style={styles.redirectButton}
           >
             <Text style={styles.redirectButtonText}>
@@ -164,7 +182,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   heading: {
-    // fontFamily: "Roboto",
+    fontFamily: "Roboto-Bold",
     fontSize: 30,
     fontWeight: 500,
     lineHeight: 35,
@@ -172,6 +190,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   input: {
+    fontFamily: "Roboto-Regular",
     width: 343,
     height: 50,
     padding: 16,
@@ -181,7 +200,14 @@ const styles = StyleSheet.create({
     borderColor: "#E8E8E8",
     backgroundColor: "#F6F6F6",
   },
-  inputFocus: {
+  inputActive: {
+    fontFamily: "Roboto-Regular",
+    width: 343,
+    height: 50,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderRadius: 8,
     borderColor: "#FF6C00",
     backgroundColor: "#FFFFFF",
   },
@@ -191,6 +217,7 @@ const styles = StyleSheet.create({
     right: 20,
   },
   privatButtonText: {
+    fontFamily: "Roboto-Regular",
     color: "#1B4371",
   },
   submitButton: {
@@ -201,6 +228,7 @@ const styles = StyleSheet.create({
     marginTop: 43,
   },
   submitButtonText: {
+    fontFamily: "Roboto-Regular",
     color: "#FFFFFF",
   },
   redirectButton: {
@@ -208,6 +236,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   redirectButtonText: {
+    fontFamily: "Roboto-Regular",
     color: "#1B4371",
   },
 });
