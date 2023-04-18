@@ -5,6 +5,8 @@ import { useState } from 'react';
 import { LoginScreen } from './Screens/LoginScreen';
 import * as Font from 'expo-font';
 import AppLoading from 'expo-app-loading';
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
 
 export default function App() {
   const [screen, setScreen] = useState("reg")
@@ -25,17 +27,29 @@ export default function App() {
       />
   }
 
+  const MainStack = createStackNavigator();
+
   return (
-    <View style={styles.container}>
-      <ImageBackground source={require("./assets/photos/PhotoBG.jpg")} style={styles.image}>
-        {screen === "reg" 
-          ? <RegistrationScreen set={setScreen}/>
-          : <LoginScreen set={setScreen}/>
-        }
-        {/* <RegistrationScreen set={setScreen}/> */}
-        <StatusBar style="auto" />
-      </ImageBackground>
-    </View>
+    <NavigationContainer>
+      <View style={styles.container}>
+        <ImageBackground
+          source={require("./assets/photos/PhotoBG.jpg")}
+          style={styles.image}
+        >
+          <MainStack.Navigator initialRouteName="Login">
+            <MainStack.Screen
+              name="Registration"
+              component={RegistrationScreen}
+            />
+            <MainStack.Screen
+              name="Login"
+              component={LoginScreen}
+            />
+          </MainStack.Navigator>
+          <StatusBar style="auto" />
+        </ImageBackground>
+      </View>
+    </NavigationContainer>
   );
 }
 

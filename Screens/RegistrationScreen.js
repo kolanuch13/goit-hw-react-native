@@ -12,53 +12,53 @@ import {
   TouchableOpacity
 } from "react-native"
 
-export const RegistrationScreen = ({set}) => {
+export const RegistrationScreen = ({ navigation }) => {
   const [registrationForm, setRegistrationForm] = useState({
-    login: '',
-    email: '',
-    password: '',
-  })
-  const [showPass, setShowPass] = useState(false)
-  const [isInputActive, setIsInputActive] = useState("")
+    login: "",
+    email: "",
+    password: "",
+  });
+  const [showPass, setShowPass] = useState(false);
+  const [isInputActive, setIsInputActive] = useState("");
 
   const loginHandler = (text) => {
-    setRegistrationForm(data => ({
+    setRegistrationForm((data) => ({
       ...data,
       login: text,
-    }))
-  }
-  
+    }));
+  };
+
   const emailHandler = (text) => {
-    setRegistrationForm(data => ({
+    setRegistrationForm((data) => ({
       ...data,
       email: text,
-    }))
-  }
+    }));
+  };
 
   const onShowPassword = () => {
     setShowPass(!showPass);
-  }
+  };
 
   const passHandler = (text) => {
-    setRegistrationForm(data => ({
+    setRegistrationForm((data) => ({
       ...data,
       password: text,
-    }))
-  }
+    }));
+  };
 
-  const handleSubmit = e => {
-    e.preventDefault()
+  const handleSubmit = (e) => {
+    e.preventDefault();
     console.log(registrationForm);
     setRegistrationForm({
-      login: '',
-      email: '',
-      password: '',
-    })
-  }
+      login: "",
+      email: "",
+      password: "",
+    });
+  };
 
-  const onRedirect = () => {
-    set("login")
-  }
+  const handleRedirect = () => {
+    navigation.navigate("Login");
+  };
 
   return (
     <KeyboardAvoidingView
@@ -79,44 +79,50 @@ export const RegistrationScreen = ({set}) => {
           <Text style={styles.heading}>Registration</Text>
           <TextInput
             onFocus={(e) => {
-              setIsInputActive("login")
+              setIsInputActive("login");
             }}
             onBlur={(e) => {
-              setIsInputActive("")
+              setIsInputActive("");
             }}
             name="login"
             placeholder="Login"
             value={registrationForm.login}
             onChangeText={loginHandler}
-            style={isInputActive === "login" ? styles.inputActive : styles.input}
+            style={
+              isInputActive === "login" ? styles.inputActive : styles.input
+            }
           />
           <TextInput
             onFocus={(e) => {
-              setIsInputActive("email")
+              setIsInputActive("email");
             }}
             onBlur={(e) => {
-              setIsInputActive("")
+              setIsInputActive("");
             }}
             name="email"
             placeholder="Email"
             value={registrationForm.email}
             onChangeText={emailHandler}
-            style={isInputActive === "email" ? styles.inputActive : styles.input}
+            style={
+              isInputActive === "email" ? styles.inputActive : styles.input
+            }
           />
           <View>
             <TextInput
               onFocus={(e) => {
-                setIsInputActive("password")
+                setIsInputActive("password");
               }}
               onBlur={(e) => {
-                setIsInputActive("")
+                setIsInputActive("");
               }}
               name="password"
               placeholder="Password"
               value={registrationForm.password}
               onChangeText={passHandler}
               secureTextEntry={!showPass}
-              style={isInputActive === "password" ? styles.inputActive : styles.input}
+              style={
+                isInputActive === "password" ? styles.inputActive : styles.input
+              }
             />
             <TouchableOpacity
               onPress={onShowPassword}
@@ -129,7 +135,7 @@ export const RegistrationScreen = ({set}) => {
             <Text style={styles.submitButtonText}>Sign In</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={onRedirect}
+            onPress={handleRedirect}
             style={styles.redirectButton}
           >
             <Text style={styles.redirectButtonText}>
@@ -140,7 +146,7 @@ export const RegistrationScreen = ({set}) => {
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
