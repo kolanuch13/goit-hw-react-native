@@ -1,18 +1,20 @@
 import { useState } from "react"
-import { 
+import {
   StyleSheet,
   Text,
-  View, 
-  TextInput, 
+  View,
+  TextInput,
   TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
   Image,
-  TouchableOpacity
-} from "react-native"
+  TouchableOpacity,
+  ImageBackground,
+} from "react-native";
+import { AntDesign } from "@expo/vector-icons";
 
-export const RegistrationScreen = ({ navigation }) => {
+export const RegistrationScreen = ({ navigation, user }) => {
   const [registrationForm, setRegistrationForm] = useState({
     login: "",
     email: "",
@@ -46,14 +48,17 @@ export const RegistrationScreen = ({ navigation }) => {
     }));
   };
 
+  console.log(user);
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(registrationForm);
+    user(registrationForm)
     setRegistrationForm({
       login: "",
       email: "",
       password: "",
     });
+    navigation.navigate("Home");
   };
 
   const handleRedirect = () => {
@@ -61,94 +66,109 @@ export const RegistrationScreen = ({ navigation }) => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS == "ios" ? "padding" : ""}
-      style={styles.container}
+    <ImageBackground
+      source={require("../assets/photos/PhotoBG.jpg")}
+      style={styles.image}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View>
-          <View style={styles.avatar}>
-            <Image style={styles.avatarImage} />
-            <TouchableOpacity
-              onPress={onShowPassword}
-              style={styles.avatarButton}
-            >
-              <Text style={styles.avatarButtonText}>+</Text>
-            </TouchableOpacity>
-          </View>
-          <Text style={styles.heading}>Registration</Text>
-          <TextInput
-            onFocus={(e) => {
-              setIsInputActive("login");
-            }}
-            onBlur={(e) => {
-              setIsInputActive("");
-            }}
-            name="login"
-            placeholder="Login"
-            value={registrationForm.login}
-            onChangeText={loginHandler}
-            style={
-              isInputActive === "login" ? styles.inputActive : styles.input
-            }
-          />
-          <TextInput
-            onFocus={(e) => {
-              setIsInputActive("email");
-            }}
-            onBlur={(e) => {
-              setIsInputActive("");
-            }}
-            name="email"
-            placeholder="Email"
-            value={registrationForm.email}
-            onChangeText={emailHandler}
-            style={
-              isInputActive === "email" ? styles.inputActive : styles.input
-            }
-          />
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : ""}
+        style={styles.container}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <View>
+            <View style={styles.avatar}>
+              <Image style={styles.avatarImage} />
+              <TouchableOpacity
+                onPress={onShowPassword}
+                style={styles.avatarButton}
+              >
+                <AntDesign name="pluscircleo" size={24} color="#FF6C00" />
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.heading}>Registration</Text>
             <TextInput
               onFocus={(e) => {
-                setIsInputActive("password");
+                setIsInputActive("login");
               }}
               onBlur={(e) => {
                 setIsInputActive("");
               }}
-              name="password"
-              placeholder="Password"
-              value={registrationForm.password}
-              onChangeText={passHandler}
-              secureTextEntry={!showPass}
+              name="login"
+              placeholder="Login"
+              value={registrationForm.login}
+              onChangeText={loginHandler}
               style={
-                isInputActive === "password" ? styles.inputActive : styles.input
+                isInputActive === "login" ? styles.inputActive : styles.input
               }
             />
+            <TextInput
+              onFocus={(e) => {
+                setIsInputActive("email");
+              }}
+              onBlur={(e) => {
+                setIsInputActive("");
+              }}
+              name="email"
+              placeholder="Email"
+              value={registrationForm.email}
+              onChangeText={emailHandler}
+              style={
+                isInputActive === "email" ? styles.inputActive : styles.input
+              }
+            />
+            <View>
+              <TextInput
+                onFocus={(e) => {
+                  setIsInputActive("password");
+                }}
+                onBlur={(e) => {
+                  setIsInputActive("");
+                }}
+                name="password"
+                placeholder="Password"
+                value={registrationForm.password}
+                onChangeText={passHandler}
+                secureTextEntry={!showPass}
+                style={
+                  isInputActive === "password"
+                    ? styles.inputActive
+                    : styles.input
+                }
+              />
+              <TouchableOpacity
+                onPress={onShowPassword}
+                style={styles.privatButton}
+              >
+                <Text style={styles.privatButtonText}>Show</Text>
+              </TouchableOpacity>
+            </View>
             <TouchableOpacity
-              onPress={onShowPassword}
-              style={styles.privatButton}
+              onPress={handleSubmit}
+              style={styles.submitButton}
             >
-              <Text style={styles.privatButtonText}>Show</Text>
+              <Text style={styles.submitButtonText}>Sign In</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleRedirect}
+              style={styles.redirectButton}
+            >
+              <Text style={styles.redirectButtonText}>
+                Already have an account? Log in
+              </Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>
-            <Text style={styles.submitButtonText}>Sign In</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handleRedirect}
-            style={styles.redirectButton}
-          >
-            <Text style={styles.redirectButtonText}>
-              Already have an account? Log in
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "flex-end",
+  },
   container: {
     flex: 0.7,
     backgroundColor: "#fff",
@@ -175,8 +195,6 @@ const styles = StyleSheet.create({
     bottom: 10,
     width: 25,
     height: 25,
-    borderWidth: 1,
-    borderRadius: 12.5,
     borderColor: "#FF6C00",
     alignItems: "center",
     justifyContent: "center",
@@ -184,13 +202,13 @@ const styles = StyleSheet.create({
   },
   avatarButtonText: {
     color: "#FF6C00",
-    fontWeight: 400,
+    // fontWeight: 400,
     fontSize: 15,
   },
   heading: {
     fontFamily: "Roboto-Bold",
     fontSize: 30,
-    fontWeight: 500,
+    // fontWeight: 500,
     lineHeight: 35,
     textAlign: "center",
     marginBottom: 16,

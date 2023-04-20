@@ -1,16 +1,17 @@
 import { useState } from "react"
-import { 
+import {
   StyleSheet,
   Text,
-  View, 
-  TextInput, 
+  View,
+  TextInput,
   TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
   Image,
-  TouchableOpacity
-} from "react-native"
+  TouchableOpacity,
+  ImageBackground,
+} from "react-native";
 
 export const LoginScreen = ({ navigation }) => {
   const [registrationForm, setRegistrationForm] = useState({
@@ -46,6 +47,7 @@ export const LoginScreen = ({ navigation }) => {
       email: "",
       password: "",
     });
+    navigation.navigate("Home");
   };
 
   const handleRedirect = () => {
@@ -53,70 +55,85 @@ export const LoginScreen = ({ navigation }) => {
   };
 
   return (
+    <ImageBackground
+      source={require("../assets/photos/PhotoBG.jpg")}
+      style={styles.image}
+    >
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : ""}
       style={styles.container}
     >
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View>
-          <Text style={styles.heading}>Login</Text>
-          <TextInput
-            onFocus={(e) => {
-              setIsInputActive("email");
-            }}
-            onBlur={(e) => {
-              setIsInputActive("");
-            }}
-            name="email"
-            placeholder="Email"
-            value={registrationForm.email}
-            onChangeText={emailHandler}
-            style={
-              isInputActive === "email" ? styles.inputActive : styles.input
-            }
-          />
           <View>
+            <Text style={styles.heading}>Login</Text>
             <TextInput
               onFocus={(e) => {
-                setIsInputActive("password");
+                setIsInputActive("email");
               }}
               onBlur={(e) => {
                 setIsInputActive("");
               }}
-              name="password"
-              placeholder="Password"
-              value={registrationForm.password}
-              onChangeText={passHandler}
-              secureTextEntry={!showPass}
+              name="email"
+              placeholder="Email"
+              value={registrationForm.email}
+              onChangeText={emailHandler}
               style={
-                isInputActive === "password" ? styles.inputActive : styles.input
+                isInputActive === "email" ? styles.inputActive : styles.input
               }
             />
+            <View>
+              <TextInput
+                onFocus={(e) => {
+                  setIsInputActive("password");
+                }}
+                onBlur={(e) => {
+                  setIsInputActive("");
+                }}
+                name="password"
+                placeholder="Password"
+                value={registrationForm.password}
+                onChangeText={passHandler}
+                secureTextEntry={!showPass}
+                style={
+                  isInputActive === "password"
+                    ? styles.inputActive
+                    : styles.input
+                }
+              />
+              <TouchableOpacity
+                onPress={onShowPassword}
+                style={styles.privatButton}
+              >
+                <Text style={styles.privatButtonText}>Show</Text>
+              </TouchableOpacity>
+            </View>
             <TouchableOpacity
-              onPress={onShowPassword}
-              style={styles.privatButton}
+              onPress={handleSubmit}
+              style={styles.submitButton}
             >
-              <Text style={styles.privatButtonText}>Show</Text>
+              <Text style={styles.submitButtonText}>Sign In</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={handleRedirect}
+              style={styles.redirectButton}
+            >
+              <Text style={styles.redirectButtonText}>
+                Do not have an account? Sign in
+              </Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>
-            <Text style={styles.submitButtonText}>Sign In</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={handleRedirect}
-            style={styles.redirectButton}
-          >
-            <Text style={styles.redirectButtonText}>
-              Do not have an account? Sign in
-            </Text>
-          </TouchableOpacity>
-        </View>
       </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: 'flex-end',
+  },
   container: {
     flex: 0.5,
     backgroundColor: "#fff",
@@ -128,7 +145,7 @@ const styles = StyleSheet.create({
   heading: {
     fontFamily: "Roboto-Bold",
     fontSize: 30,
-    fontWeight: 500,
+    // fontWeight: 500,
     lineHeight: 35,
     textAlign: "center",
     marginBottom: 16,

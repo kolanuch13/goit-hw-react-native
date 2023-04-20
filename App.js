@@ -1,37 +1,55 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, ImageBackground } from 'react-native';
 import { RegistrationScreen } from './Screens/RegistrationScreen';
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { LoginScreen } from './Screens/LoginScreen';
 import * as Font from 'expo-font';
-import AppLoading from 'expo-app-loading';
+import * as SplashScreen from "expo-splash-screen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { Home } from './Screens/Home';
 
 export default function App() {
-  const [screen, setScreen] = useState("reg")
-  const [isReady, setIsReady] = useState(false)
+  const [appIsReady, setAppIsReady] = useState(false);
+  const [user, setUser] = useState({
+    login: "",
+    email: "",
+    password: "",
+  })
 
-  const loadApp = async () => {
-    await Font.loadAsync({
-      'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
-      'Roboto-Bold': require('./assets/fonts/Roboto-Bold.ttf')
-    });
-  }
+    useEffect(() => {
+      async function prepare() {
+        try {
+          await SplashScreen.preventAutoHideAsync();
+          await Font.loadAsync({
+            "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+            "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
+          });
+        } catch (e) {
+          console.warn(e);
+        } finally {
+          setAppIsReady(true);
+        }
+      }
 
-  if (!isReady) {
-    return <AppLoading
-      startAsync={loadApp}
-      onFinish={()=>setIsReady(true)}
-      onError={console.log("err")}
-      />
-  }
+      prepare();
+    }, []);
+
+    const onLayoutRootView = useCallback(async () => {
+      if (appIsReady) {
+        await SplashScreen.hideAsync();
+      }
+    }, [appIsReady]);
+
+    if (!appIsReady) {
+      return null;
+    }
 
   const MainStack = createStackNavigator();
 
   return (
     <NavigationContainer>
-      <View style={styles.container}>
+      <View style={styles.container} onLayout={onLayoutRootView}>
         <ImageBackground
           source={require("./assets/photos/PhotoBG.jpg")}
           style={styles.image}
@@ -40,10 +58,17 @@ export default function App() {
             <MainStack.Screen
               name="Registration"
               component={RegistrationScreen}
+              user={setUser}
             />
             <MainStack.Screen
               name="Login"
               component={LoginScreen}
+              user={setUser}
+            />
+            <MainStack.Screen
+              name="Home"
+              component={Home}
+              user={user}
             />
           </MainStack.Navigator>
           <StatusBar style="auto" />
