@@ -58,17 +58,23 @@ export default function App() {
             <MainStack.Screen
               name="Registration"
               component={RegistrationScreen}
-              user={setUser}
+              options={{
+                headerShown: false,
+              }}
             />
             <MainStack.Screen
               name="Login"
               component={LoginScreen}
-              user={setUser}
+              options={{
+                headerShown: false,
+              }}
             />
             <MainStack.Screen
               name="Home"
               component={Home}
-              user={user}
+              options={{
+                headerShown: false,
+              }}
             />
           </MainStack.Navigator>
           <StatusBar style="auto" />

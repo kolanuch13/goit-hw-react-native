@@ -14,7 +14,7 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
-export const RegistrationScreen = ({ navigation, user }) => {
+export const RegistrationScreen = ({ navigation }) => {
   const [registrationForm, setRegistrationForm] = useState({
     login: "",
     email: "",
@@ -48,11 +48,9 @@ export const RegistrationScreen = ({ navigation, user }) => {
     }));
   };
 
-  console.log(user);
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(registrationForm);
-    user(registrationForm)
     setRegistrationForm({
       login: "",
       email: "",
@@ -170,7 +168,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   container: {
-    flex: 0.7,
+    flex: 0.65,
     backgroundColor: "#fff",
     alignItems: "center",
     borderTopLeftRadius: 25,

@@ -2,13 +2,6 @@ import { useState } from "react";
 import {
   StyleSheet,
   Text,
-  View,
-  TextInput,
-  TouchableWithoutFeedback,
-  Keyboard,
-  KeyboardAvoidingView,
-  Platform,
-  Image,
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
@@ -17,9 +10,19 @@ import { Feather } from "@expo/vector-icons";
 import { CreatePostScreen } from "./CreatePostsScreen";
 import { ProfileScreen } from "./ProfileScreen";
 import { PostsScreen } from "./PostsScreen";
+import { TabRouter } from "@react-navigation/native";
 
-export const Home = ({user}) => {
+export const Home = ({ navigation }) => {
   const Tabs = createBottomTabNavigator();
+
+  const handleLogOut = () => {
+    navigation.navigate("Login");
+  };
+
+  const handleBack = () => {
+    navigation.navigate("PostsScreen");
+  }
+
   return (
     <ImageBackground
       source={require("../assets/photos/PhotoBG.jpg")}
@@ -29,24 +32,71 @@ export const Home = ({user}) => {
         screenOptions={({ route }) => ({
           tabBarIcon: ({ focused, color, size }) => {
             let iconName;
-            if (route.name === "PostScreen") {
-              iconName = focused ? "grid" : "grid";
-            } else if (route.name === "CreatePostScreen") {
-              iconName = focused ? "plus" : "plus";
-            } else if (route.name === "ProfileScreen") {
-              iconName = focused ? "user" : "user";
+            switch (route.name) {
+              case "PostsScreen":
+                iconName = "grid";
+                break;
+              case "CreatePostScreen":
+                iconName = "plus";
+                break;
+              case "ProfileScreen":
+                iconName = "user";
+                break;
             }
             return <Feather name={iconName} size={size} color={color} />;
           },
+          tabBarShowLabel: false,
+          tabBarStyle: {
+            alignItems: "center",
+            paddingTop: 9,
+            height: 83,
+          },
+          tabBarItemStyle: {
+            maxWidth: 70,
+            height: 40,
+            borderRadius: 100,
+          },
         })}
         tabBarOptions={{
-          activeTintColor: "#FF6C00",
+          activeTintColor: "#FFF",
+          activeBackgroundColor: "#FF6C00",
           inactiveTintColor: "#21212180",
         }}
       >
-        <Tabs.Screen name="PostsScreen" component={PostsScreen} user={user} />
-        <Tabs.Screen name="CreatePostScreen" component={CreatePostScreen} />
-        <Tabs.Screen name="ProfileScreen" component={ProfileScreen} />
+        <Tabs.Screen
+          name="PostsScreen"
+          component={PostsScreen}
+          options={{
+            headerTitle: () => <Text style={styles.title}>Publications</Text>,
+            headerTitleAlign: "center",
+            headerRight: () => (
+              <TouchableOpacity onPress={handleLogOut}>
+                <Feather name="log-out" size={24} color="#BDBDBD" />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Tabs.Screen
+          name="CreatePostScreen"
+          component={CreatePostScreen}
+          options={{
+            headerTitle: () => (
+              <Text style={styles.title}>Create publication</Text>
+            ),
+            headerTitleAlign: "center",
+            headerLeft: () => (
+              <TouchableOpacity onPress={handleBack}>
+                <Feather name="arrow-left" size={24} color="#BDBDBD" />
+              </TouchableOpacity>
+            ),
+            tabBarStyle: {
+              display: "none",
+            }
+          }}
+        />
+        <Tabs.Screen name="ProfileScreen" component={ProfileScreen} options={{
+          headerTitle: "none"
+        }} />
       </Tabs.Navigator>
     </ImageBackground>
   );
@@ -58,4 +108,10 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     justifyContent: "flex-end",
   },
+  title: {
+    alignItems: "center",
+    fontStyle: "normal",
+    fontSize: 17,
+    letterSpacing: -0.408,
+  }
 });

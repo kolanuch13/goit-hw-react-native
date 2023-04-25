@@ -1,13 +1,20 @@
-import { Text, StyleSheet, View } from "react-native";
+import { Text, StyleSheet, View, Image } from "react-native";
 
-export const PostsScreen = ({user}) => {
+export const PostsScreen = () => {
   return (
     <View style={styles.container}>
-      <View>
-        <Text>{user.login}</Text>
-        <Text>{user.mail}</Text>
+      <View style={styles.profile}>
+        <View style={styles.avatar}>
+          <Image style={styles.avatarImage} />
+        </View>
+        <View style={styles.name}>
+          <Text>Mykola Riabokin</Text>
+          <Text>kolanuch13@gmail.com</Text>
+        </View>
       </View>
-      <Text>PostsScreen</Text>
+      <View stylr={styles.publications}>
+        
+      </View>
     </View>
   );
 }
@@ -15,5 +22,26 @@ export const PostsScreen = ({user}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#FFF",
+    paddingTop: 32,
+    paddingHorizontal: 16
+  },
+  profile: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  avatar: {
+
+  },
+  avatarImage: {
+    width: 60,
+    height: 60,
+    backgroundColor: "#F6F6F6",
+    borderRadius: 16,
+  },
+  name: {
+
   }
 });

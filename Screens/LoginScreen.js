@@ -8,7 +8,6 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  Image,
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
@@ -59,71 +58,71 @@ export const LoginScreen = ({ navigation }) => {
       source={require("../assets/photos/PhotoBG.jpg")}
       style={styles.image}
     >
-    <KeyboardAvoidingView
-      behavior={Platform.OS == "ios" ? "padding" : ""}
-      style={styles.container}
-    >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View>
-            <Text style={styles.heading}>Login</Text>
-            <TextInput
-              onFocus={(e) => {
-                setIsInputActive("email");
-              }}
-              onBlur={(e) => {
-                setIsInputActive("");
-              }}
-              name="email"
-              placeholder="Email"
-              value={registrationForm.email}
-              onChangeText={emailHandler}
-              style={
-                isInputActive === "email" ? styles.inputActive : styles.input
-              }
-            />
+      <KeyboardAvoidingView
+        behavior={Platform.OS == "ios" ? "padding" : ""}
+        style={styles.container}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <View>
+              <Text style={styles.heading}>Login</Text>
               <TextInput
                 onFocus={(e) => {
-                  setIsInputActive("password");
+                  setIsInputActive("email");
                 }}
                 onBlur={(e) => {
                   setIsInputActive("");
                 }}
-                name="password"
-                placeholder="Password"
-                value={registrationForm.password}
-                onChangeText={passHandler}
-                secureTextEntry={!showPass}
+                name="email"
+                placeholder="Email"
+                value={registrationForm.email}
+                onChangeText={emailHandler}
                 style={
-                  isInputActive === "password"
-                    ? styles.inputActive
-                    : styles.input
+                  isInputActive === "email" ? styles.inputActive : styles.input
                 }
               />
+              <View>
+                <TextInput
+                  onFocus={(e) => {
+                    setIsInputActive("password");
+                  }}
+                  onBlur={(e) => {
+                    setIsInputActive("");
+                  }}
+                  name="password"
+                  placeholder="Password"
+                  value={registrationForm.password}
+                  onChangeText={passHandler}
+                  secureTextEntry={!showPass}
+                  style={
+                    isInputActive === "password"
+                      ? styles.inputActive
+                      : styles.input
+                  }
+                />
+                <TouchableOpacity
+                  onPress={onShowPassword}
+                  style={styles.privatButton}
+                >
+                  <Text style={styles.privatButtonText}>Show</Text>
+                </TouchableOpacity>
+              </View>
               <TouchableOpacity
-                onPress={onShowPassword}
-                style={styles.privatButton}
+                onPress={handleSubmit}
+                style={styles.submitButton}
               >
-                <Text style={styles.privatButtonText}>Show</Text>
+                <Text style={styles.submitButtonText}>Sign In</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleRedirect}
+                style={styles.redirectButton}
+              >
+                <Text style={styles.redirectButtonText}>
+                  Do not have an account? Sign in
+                </Text>
               </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              onPress={handleSubmit}
-              style={styles.submitButton}
-            >
-              <Text style={styles.submitButtonText}>Sign In</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={handleRedirect}
-              style={styles.redirectButton}
-            >
-              <Text style={styles.redirectButtonText}>
-                Do not have an account? Sign in
-              </Text>
-            </TouchableOpacity>
-          </View>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </ImageBackground>
   );
 };
